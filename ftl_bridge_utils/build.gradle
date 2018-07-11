@@ -1,0 +1,9 @@
+ext {
+    baseId = "ftl_bridge_utils"
+}
+
+apply from: "${rootDir}/common/base_java_script.gradle"
+
+dependencies {
+    compile "edu.wpi.first.wpiutil:wpiutil-java:" + getWpiUtilVersion()
+}
