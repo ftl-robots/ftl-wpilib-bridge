@@ -1,5 +1,50 @@
+### C++ ###
+*.slo
+*.lo
+*.o
+*.obj
+
+# precompiled headers
+*.gch
+*.pch
+
+#compiled dynamic libs
+*.so
+*.dylib
+*.dll
+
+#compiled static libs
+*.lai
+*.la
+*.a
+*.lib
+
+#executables
+*.exe
+*.out
+*.app
+
+.vs/
+*.def
+!mockhal.def
+*.opensdf
+*.vcxproj
+*.vcxproj.user
+*.sdf
+
+#compiled java files
+*.class
+
+#build dirs
+/.gradle
+/build*
+!build.gradle
+/native
+/arm
+
 .gradle
-/build/
+build/
+external_dependencies/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -12,3 +57,29 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+### eclipse ###
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+.project
+
+.externalToolBuilders/
+
+.launch
+
+.classpath
+.factorypath
+.buildpath
+.target
+
+.vscode/
