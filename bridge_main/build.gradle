@@ -1,0 +1,66 @@
+import org.gradle.internal.os.OperatingSystem
+
+evaluationDependsOn(":ftl_bridge_utils")
+evaluationDependsOn(":hal_interface")
+
+ext {
+    baseId = "bridge_main"
+}
+
+apply from: "${rootDir}/common/base_java_script.gradle"
+apply plugin: "application"
+
+configurations {
+    native3rdPartyDeps
+    compile.extendsFrom(native3rdPartyDeps)
+}
+
+apply from: "${rootDir}/capture-wpi-libraries.gradle"
+
+dependencies {
+    // WPILib
+    compile "edu.wpi.first.wpilibj:wpilibj-java:" + allwpilibVersion()
+    compile "edu.wpi.first.wpiutil:wpiutil-java:" + getWpiUtilVersion()
+    compile "edu.wpi.first.cscore:cscore-java:" + getCsCoreVersion()
+    runtime "edu.wpi.first.cscore:cscore-jni:" + getCsCoreVersion() + ":all"
+    compile "edu.wpi.first.ntcore:ntcore-java:" + getNtCoreVersion()
+    runtime "edu.wpi.first.ntcore:ntcore-jni": + getNtCoreVersion() + ":all"
+    compile "org.opencv:opencv-java:" + getWpilibOpencvVersion()
+    runtime "org.opencv:opencv-jni:" + getWpilibOpencvVersion() + ":all"
+
+    // Internal Deps
+    compile project(":ftl_bridge_utils")
+
+    def os_name = org.gradle.internal.os.OperatingSystem.current().getFamilyName()
+    compile project(":ftl_bridge")
+    runtime captureWpiLibraries.outputs.files
+
+    runtime jar.outputs.files
+
+    runtime project(":hal_interface").packageNativehal_interface_jniFilesInJar.outputs.files
+}
+
+task unzipNativeLibraries(type: Copy) {
+    configurations.native3rdPartyDeps.each {
+        from zipTree(it)
+        into "build/native_libs"
+        include "**/*.dll"
+        include "**/*.lib"
+        include "**/*.pdb"
+        include "**/*.so*"
+        include "**/*.a"
+        include "**/*.dylib*"
+    }
+
+    includeEmptyDirs = false
+}
+
+build.dependsOn unzipNativeLibraries
+
+compileJave.dependsOn(":ftl_bridge:build")
+
+jar {
+    baseName = "bridge_main"
+}
+
+mainClassName = "com.ftlrobots.bridge.Main"
