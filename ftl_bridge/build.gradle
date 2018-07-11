@@ -1,0 +1,24 @@
+import edu.wpi.first.nativeutils.NativeUtils
+import org.gradle.api.file.FileCollection
+import org.gradle.internal.os.OperatingSystem
+
+evaluationDependsOn(":ftl_bridge_utils")
+evaluationDependsOn(":hal_interface")
+
+ext {
+    baseId = "ftl_bridge"
+}
+
+apply from: "${rootDir}/common/base_java_script.gradle"
+apply from: "${rootDir}/capture-wpi-libraries.gradle"
+
+dependencies {
+    compile "edu.wpi.first.ntcore:ntcore-java:" + getNtCoreVersion()
+    compile "edu.wpi.first.cscore:cscore-java:" + getCsCoreVersion()
+    compile "edu.wpi.first.wpilibj:wpilibj-java:" + allwpilibVersion()
+    compile project(":ftl_bridge_utils")
+    compile project(":hal_interface")
+
+    runtime captureWpiLibraries.outputs.files
+    runtime project(":hal_interface").packageNativehal_interface_jniFilesInJar.outputs.files
+}
