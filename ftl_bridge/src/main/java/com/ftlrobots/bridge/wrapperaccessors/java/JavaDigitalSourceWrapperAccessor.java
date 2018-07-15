@@ -7,6 +7,9 @@ import com.ftlrobots.bridge.modulewrapper.factories.DefaultDigitalIOWrapperFacto
 import com.ftlrobots.bridge.modulewrapper.interfaces.IDigitalIOWrapper;
 import com.ftlrobots.bridge.wrapperaccessors.DigitalSourceWrapperAccessor;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
 public class JavaDigitalSourceWrapperAccessor extends BaseWrapperAccessor<IDigitalIOWrapper> implements DigitalSourceWrapperAccessor {
     private final DefaultDigitalIOWrapperFactory mFactory;
 
@@ -30,7 +33,7 @@ public class JavaDigitalSourceWrapperAccessor extends BaseWrapperAccessor<IDigit
             getValue(port).close();
         }
         catch (Exception e) {
-            System.out.println("Could not close simulator: " + e.getMessage());
+            LogManager.getLogger().log(Level.WARN, "Could not close endpoint", e);
         }
         SensorActuatorRegistry.get().getDigitalSources().remove(port);
     }

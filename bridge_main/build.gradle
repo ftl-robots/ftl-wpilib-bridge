@@ -24,9 +24,13 @@ dependencies {
     compile "edu.wpi.first.cscore:cscore-java:" + getCsCoreVersion()
     runtime "edu.wpi.first.cscore:cscore-jni:" + getCsCoreVersion() + ":all"
     compile "edu.wpi.first.ntcore:ntcore-java:" + getNtCoreVersion()
-    runtime "edu.wpi.first.ntcore:ntcore-jni": + getNtCoreVersion() + ":all"
+    runtime "edu.wpi.first.ntcore:ntcore-jni:" + getNtCoreVersion() + ":all"
     compile "org.opencv:opencv-java:" + getWpilibOpencvVersion()
     runtime "org.opencv:opencv-jni:" + getWpilibOpencvVersion() + ":all"
+
+    // 3rd party
+    compile "org.apache.logging.log4j:log4j-api:2.11.0"
+    compile "org.apache.logging.log4j:log4j-core:2.11.0"
 
     // Internal Deps
     compile project(":ftl_bridge_utils")
@@ -57,7 +61,7 @@ task unzipNativeLibraries(type: Copy) {
 
 build.dependsOn unzipNativeLibraries
 
-compileJave.dependsOn(":ftl_bridge:build")
+compileJava.dependsOn(":ftl_bridge:build")
 
 jar {
     baseName = "bridge_main"

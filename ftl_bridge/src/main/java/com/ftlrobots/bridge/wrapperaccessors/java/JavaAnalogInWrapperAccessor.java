@@ -7,6 +7,9 @@ import com.ftlrobots.bridge.modulewrapper.factories.DefaultAnalogInWrapperFactor
 import com.ftlrobots.bridge.modulewrapper.interfaces.IAnalogInWrapper;
 import com.ftlrobots.bridge.wrapperaccessors.AnalogSourceWrapperAccessor;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
 public class JavaAnalogInWrapperAccessor extends BaseWrapperAccessor<IAnalogInWrapper> implements AnalogSourceWrapperAccessor {
     private final DefaultAnalogInWrapperFactory mFactory;
 
@@ -30,7 +33,7 @@ public class JavaAnalogInWrapperAccessor extends BaseWrapperAccessor<IAnalogInWr
             getValue(port).close();
         }
         catch (Exception e) {
-            System.out.println("Could not close simulator: " + e.getMessage());
+            LogManager.getLogger().log(Level.WARN, "Could not close endpoint", e);
         }
         SensorActuatorRegistry.get().getAnalogIn().remove(port);
     }

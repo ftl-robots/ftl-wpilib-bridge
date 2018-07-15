@@ -9,10 +9,15 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import edu.wpi.first.wpiutil.RuntimeDetector;
 
 public final class JniLibraryResourceLoader {
 
+    private static final Logger sLogger = LogManager.getLogger(JniLibraryResourceLoader.class);
 
     private static final File TEMP_DIR_ROOT;
     private static final File TEMP_DIR;
@@ -25,7 +30,7 @@ public final class JniLibraryResourceLoader {
         long randNum = new Random().nextLong();
         TEMP_DIR = new File(TEMP_DIR_ROOT, Long.toString(randNum));
         if (!TEMP_DIR.mkdirs()) {
-            System.out.println("Could not create temp directory");
+            sLogger.log(Level.ERROR, "Could not create temp directory");
         }
         TEMP_DIR.deleteOnExit();
 
@@ -45,7 +50,7 @@ public final class JniLibraryResourceLoader {
         }
 
         if (!file.delete()) {
-            System.out.println("Could not delete old temporary directory");
+            sLogger.log(Level.ERROR, "Could not delete old temp directory");
         }
     }
 
@@ -58,7 +63,7 @@ public final class JniLibraryResourceLoader {
 
         try (InputStream is = JniLibraryResourceLoader.class.getResourceAsStream(resourceName)) {
             if (is == null) {
-                System.out.println("Could not find resource at " + resourceName);
+                sLogger.log(Level.FATAL, "Could not find resource at " + resourceName);
             }
             else {
                 if (deleteOnExit) {
@@ -80,7 +85,7 @@ public final class JniLibraryResourceLoader {
                     is.close();
                 }
 
-                System.out.println("Copied resource to " + resourceFile.getAbsolutePath() + " from resource " + resourceName);
+                sLogger.log(Level.INFO, "Copied resource to " + resourceFile.getAbsolutePath() + " from resource " + resourceName);
             }
         }
 
@@ -102,7 +107,7 @@ public final class JniLibraryResourceLoader {
 
     private static boolean loadLibrary(File tempDir, String libraryName) {
         if (LOADED_LIBS.contains(libraryName)) {
-            System.out.println("Already loaded " + libraryName);
+            sLogger.log(Level.TRACE, "Already loaded " + libraryName);
             return true;
         }
 
@@ -116,7 +121,7 @@ public final class JniLibraryResourceLoader {
             }
         }
         catch (Exception e) {
-            System.out.println("Error loading library: " + e.getMessage());
+            sLogger.log(Level.ERROR, e);
         }
 
         return output;

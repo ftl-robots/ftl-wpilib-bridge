@@ -9,7 +9,14 @@ import com.ftlrobots.bridge.modulewrapper.interfaces.IAnalogInWrapper;
 import com.ftlrobots.bridge.modulewrapper.interfaces.IDigitalIOWrapper;
 import com.ftlrobots.bridge.modulewrapper.interfaces.ISimulatorUpdater;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public final class SensorActuatorRegistry {
+
+    private static final Logger sLogger = LogManager.getLogger(SensorActuatorRegistry.class);
+
     private static SensorActuatorRegistry sInstance = new SensorActuatorRegistry();
 
     private final Map<Integer, IDigitalIOWrapper> mDigitalSourceWrapperMap = new HashMap<>();
@@ -25,7 +32,7 @@ public final class SensorActuatorRegistry {
 
     public <ItemType> boolean registerItem(ItemType item, int port, Map<Integer, ItemType> compMap, String message) {
         if (compMap.containsKey(port)) {
-            System.out.println("Endpoint already exists for port " + port);
+            sLogger.log(Level.WARN, "Endpoint already exists for port " + port);
         }
         compMap.put(port, item);
         return true;

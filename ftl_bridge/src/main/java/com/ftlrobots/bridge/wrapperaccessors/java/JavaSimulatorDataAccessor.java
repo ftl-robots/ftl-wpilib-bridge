@@ -9,10 +9,15 @@ import com.ftlrobots.bridge.jni.RegisterCallbacksJni;
 import com.ftlrobots.bridge.modulewrapper.interfaces.ISimulatorUpdater;
 import com.ftlrobots.bridge.wrapperaccessors.SimulatorDataAccessor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import edu.wpi.first.hal.sim.mockdata.DriverStationDataJNI;
 import edu.wpi.first.hal.sim.mockdata.SimulatorJNI;
 
 public class JavaSimulatorDataAccessor implements SimulatorDataAccessor {
+
+    private static final Logger sLogger = LogManager.getLogger(JavaSimulatorDataAccessor.class);
     private double mEnabledTime = -1;
 
     @Override
