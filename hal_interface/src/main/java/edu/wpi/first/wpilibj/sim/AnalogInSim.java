@@ -3,17 +3,17 @@ package edu.wpi.first.wpilibj.sim;
 import edu.wpi.first.hal.sim.mockdata.AnalogInDataJNI;
 
 public class AnalogInSim {
-    private final int m_index;
+    private final int mIndex;
 
     public AnalogInSim(int index) {
-        m_index = index;
+        mIndex = index;
     }
 
     public double getVoltage() {
-        return AnalogInDataJNI.getVoltage(m_index);
+        return AnalogInDataJNI.getVoltage(mIndex);
     }
 
     public void setVoltage(double voltage) {
-        AnalogInDataJNI.setVoltage(m_index, voltage);
+        AnalogInDataJNI.setVoltage(mIndex, voltage);
     }
 }
