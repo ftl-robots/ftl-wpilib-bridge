@@ -1,0 +1,22 @@
+import org.gradle.internal.os.OperatingSystem
+
+apply plugin: "maven-publish"
+apply from: "capture-wpi-libraries.gradle"
+
+publishing {
+    repositories {
+        maven {
+            url maven_publishing_path
+        }
+    }
+
+    publications {
+        wpilibCopies(MavenPublication) {
+            artifact captureWpiLibraries
+
+            groupId "com.ftlrobots.bridge"
+            artifactId "wpilib"
+            version maven_version
+        }
+    }
+}

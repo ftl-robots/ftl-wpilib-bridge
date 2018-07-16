@@ -16,3 +16,5 @@ repositories {
         url getJaci3rdPartyMirror()
     }
 }
+
+apply from: "${rootDir}/common/base_java_publish.gradle"

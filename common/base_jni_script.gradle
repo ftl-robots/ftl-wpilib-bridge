@@ -21,7 +21,7 @@ task "packageNative${libraryName}FilesInJar"(type: Jar) {
 
     project.model {
         binaries {
-            withType(SharedLibraryBinarySpec) { binary -> 
+            withType(SharedLibraryBinarySpec) { binary ->
                 if (binary.component.name == project.libraryName) {
                     dependsOn binary.buildTask
                     from (binary.sharedLibraryFile) {
@@ -72,3 +72,5 @@ model {
         }
     }
 }
+
+apply from: "${rootDir}/common/base_jni_publish.gradle"
