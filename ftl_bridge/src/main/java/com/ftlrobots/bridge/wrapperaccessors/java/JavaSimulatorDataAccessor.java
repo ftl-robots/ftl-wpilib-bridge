@@ -12,9 +12,6 @@ import com.ftlrobots.bridge.wrapperaccessors.SimulatorDataAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import edu.wpi.first.hal.sim.mockdata.DriverStationDataJNI;
-import edu.wpi.first.hal.sim.mockdata.SimulatorJNI;
-
 public class JavaSimulatorDataAccessor implements SimulatorDataAccessor {
 
     private static final Logger sLogger = LogManager.getLogger(JavaSimulatorDataAccessor.class);
@@ -43,61 +40,6 @@ public class JavaSimulatorDataAccessor implements SimulatorDataAccessor {
     }
 
     @Override
-    public void setDisabled(boolean disabled) {
-        DriverStationDataJNI.setEnabled(!disabled);
-        DriverStationDataJNI.setDsAttached(!disabled);
-        mEnabledTime = System.currentTimeMillis() * 1e-3;
-    }
-
-    @Override
-    public void setAutonomous(boolean autonomous) {
-        DriverStationDataJNI.setAutonomous(autonomous);
-        mEnabledTime = System.currentTimeMillis() * 1e-3;
-    }
-
-    @Override
-    public double getMatchTime() {
-        return 0;
-    }
-
-    @Override
-    public void waitForProgramToStart() {
-        SimulatorJNI.waitForProgramStart();
-    }
-
-    @Override
-    public void notifyNewData() {
-        DriverStationDataJNI.notifyNewData();
-    }
-
-    private double mNextExpectedTime = System.nanoTime() * 1e-9;
-
-    @Override
-    public void waitForNextUpdateLoop(double updatePeriod) {
-        double currentTime = System.nanoTime() * 1e-9;
-        double diff = currentTime - mNextExpectedTime;
-        double timeToWait = updatePeriod - diff;
-
-        mNextExpectedTime += updatePeriod;
-
-        try {
-            if (timeToWait > 0) {
-                Thread.sleep((long) (timeToWait * 1000));
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DriverStationDataJNI.notifyNewData();
-    }
-
-    @Override
-    public void setMatchInfo(String eventName, MatchType matchType, int matchNumber, int replayNumner, String gameSpecificMessage) {
-        // TODO
-    }
-
-    @Override
     public void removeSimulatorComponent(Object component) {
         for (ISimulatorUpdater sim : SensorActuatorRegistry.get().getSimulatorComponents()) {
             if (sim.getConfig().equals(component)) {
@@ -105,12 +47,6 @@ public class JavaSimulatorDataAccessor implements SimulatorDataAccessor {
                 break;
             }
         }
-    }
-
-    @Override
-    public double getTimeSinceEnabled() {
-        double currentTime = System.currentTimeMillis() * 1e-3;
-        return currentTime - mEnabledTime;
     }
 
 }

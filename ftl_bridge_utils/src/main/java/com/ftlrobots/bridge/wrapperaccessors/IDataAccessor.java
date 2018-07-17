@@ -11,6 +11,8 @@ public interface IDataAccessor {
 
     DigitalSourceWrapperAccessor getDigitalAccessor();
 
+    DriverStationDataAccessor getDriverStationAccessor();
+
     SimulatorDataAccessor getSimulatorDataAccessor();
 
     String getInitializationErrors();

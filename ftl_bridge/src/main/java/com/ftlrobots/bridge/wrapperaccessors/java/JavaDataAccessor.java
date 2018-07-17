@@ -5,6 +5,7 @@ import com.ftlrobots.bridge.jni.RegisterCallbacksJni;
 import com.ftlrobots.bridge.wrapperaccessors.DataAccessorFactory;
 import com.ftlrobots.bridge.wrapperaccessors.AnalogSourceWrapperAccessor;
 import com.ftlrobots.bridge.wrapperaccessors.DigitalSourceWrapperAccessor;
+import com.ftlrobots.bridge.wrapperaccessors.DriverStationDataAccessor;
 import com.ftlrobots.bridge.wrapperaccessors.IDataAccessor;
 import com.ftlrobots.bridge.wrapperaccessors.IBasicSensorActuatorWrapperAccessor;
 import com.ftlrobots.bridge.wrapperaccessors.SimulatorDataAccessor;
@@ -13,6 +14,7 @@ public class JavaDataAccessor implements IDataAccessor {
     private final AnalogSourceWrapperAccessor mAnalogIn;
     private final DigitalSourceWrapperAccessor mDigital;
     private final SimulatorDataAccessor mSimulator;
+    private final DriverStationDataAccessor mDriverStation;
 
     public JavaDataAccessor() {
         LogConfigurator.loadLog4jConfig();
@@ -21,6 +23,7 @@ public class JavaDataAccessor implements IDataAccessor {
         mAnalogIn = new JavaAnalogInWrapperAccessor();
         mDigital = new JavaDigitalSourceWrapperAccessor();
         mSimulator = new JavaSimulatorDataAccessor();
+        mDriverStation = new JavaDriverStationWrapperAccessor();
     }
 
     @Override
@@ -41,6 +44,11 @@ public class JavaDataAccessor implements IDataAccessor {
     @Override
     public SimulatorDataAccessor getSimulatorDataAccessor() {
         return mSimulator;
+    }
+
+    @Override
+    public DriverStationDataAccessor getDriverStationAccessor() {
+        return mDriverStation;
     }
 
     private String getInitializationError(String name, IBasicSensorActuatorWrapperAccessor accessor) {
