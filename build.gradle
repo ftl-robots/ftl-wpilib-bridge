@@ -72,5 +72,3 @@ ext.maven_version = "2018.1.0"
 if (hasProperty("maven_version")) {
     ext.maven_version = maven_version
 }
-
-apply from: "publish.gradle"

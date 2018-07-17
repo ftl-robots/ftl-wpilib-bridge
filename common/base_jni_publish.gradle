@@ -30,7 +30,7 @@ task cppSourcesZip(type: Zip) {
 model {
     publishing {
         def createAllTask
-        createAllTask = createAllCombined(project."packageNative${libraryName}FilesInJar", libraryName, zipBaseName, Jar, project)
+        createAllTask = createAllCombined(project.packageNativeFiles, libraryName, zipBaseName, Jar, project)
 
         repositories {
             maven {
@@ -45,7 +45,7 @@ model {
 
                 artifact cppHeadersZip
                 artifact cppSourcesZip
-                artifact project."packageNative${libraryName}FilesInJar"
+                artifact project.packageNativeFiles
                 artifact createAllTask
             }
         }

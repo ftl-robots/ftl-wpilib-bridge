@@ -15,8 +15,7 @@ configurations {
     compile.extendsFrom(native3rdPartyDeps)
 }
 
-apply from: "${rootDir}/capture-wpi-libraries.gradle"
-
+configurations.maybeCreate("wpilibNativeDeps")
 dependencies {
     // WPILib
     compile "edu.wpi.first.wpilibj:wpilibj-java:" + allwpilibVersion()
@@ -37,12 +36,15 @@ dependencies {
 
     def os_name = org.gradle.internal.os.OperatingSystem.current().getFamilyName()
     compile project(":ftl_bridge")
-    runtime captureWpiLibraries.outputs.files
+
 
     runtime jar.outputs.files
 
-    runtime project(":hal_interface").packageNativehal_interface_jniFilesInJar.outputs.files
+    wpilibNativeDeps project(":hal_interface").packageNativeFiles.outputs.files
 }
+
+apply from: "${rootDir}/common/extract_native_libraries.gradle"
+run.dependsOn extract_wpilib
 
 task unzipNativeLibraries(type: Copy) {
     configurations.native3rdPartyDeps.each {

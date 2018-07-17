@@ -8,11 +8,10 @@ apply from: "${rootDir}/common/base_java_script.gradle"
 apply from: "${rootDir}/common/config.gradle"
 
 dependencies {
-
+    compile project(":ftl_bridge_utils")
 }
 
-// the $libraryName variable is provided by the including script
-task "packageNative${libraryName}FilesInJar"(type: Jar) {
+task packageNativeFiles(type: Jar) {
     group = "Package Natives"
     description = "Package Natives"
 
@@ -43,7 +42,7 @@ task "packageNative${libraryName}FilesInJar"(type: Jar) {
     }
 }
 
-build.dependsOn "packageNative${libraryName}FilesInJar"
+build.dependsOn packageNativeFiles
 
 model {
     components {
@@ -53,6 +52,7 @@ model {
             }
 
             javaCompileTasks << compileJava
+            jniCrossCompileOptions << JniCrossCompileOptions("athena")
             sources {
                 cpp {
                     source {
