@@ -1,5 +1,6 @@
 package com.ftlrobots.bridge.wrapperaccessors.java;
 
+import com.ftlrobots.bridge.LogConfigurator;
 import com.ftlrobots.bridge.jni.RegisterCallbacksJni;
 import com.ftlrobots.bridge.wrapperaccessors.DataAccessorFactory;
 import com.ftlrobots.bridge.wrapperaccessors.AnalogSourceWrapperAccessor;
@@ -14,6 +15,7 @@ public class JavaDataAccessor implements IDataAccessor {
     private final SimulatorDataAccessor mSimulator;
 
     public JavaDataAccessor() {
+        LogConfigurator.loadLog4jConfig();
         RegisterCallbacksJni.reset();
 
         mAnalogIn = new JavaAnalogInWrapperAccessor();
