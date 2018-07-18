@@ -128,6 +128,14 @@ public final class JniLibraryResourceLoader {
     }
 
     public static boolean loadLibrary(String libraryName) {
-        return loadLibrary(TEMP_DIR, libraryName);
+        // return loadLibrary(TEMP_DIR, libraryName);
+        try {
+            System.loadLibrary(libraryName);
+            return true;
+        }
+        catch (Exception | UnsatisfiedLinkError ex) {
+            sLogger.log(Level.ERROR, ex);
+        }
+        return false;
     }
 }

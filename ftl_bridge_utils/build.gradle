@@ -9,3 +9,9 @@ dependencies {
     compile "org.apache.logging.log4j:log4j-api:2.11.0"
     compile "org.apache.logging.log4j:log4j-core:2.11.0"
 }
+
+jar {
+    from("${rootDir}/ftl_bridge_utils/src/main/java") {
+        include "**/*.xml"
+    }
+}

@@ -39,13 +39,28 @@ task extract_wpilib {
             }
         }
 
+
     File dir = new File(project.buildDir, "extracted_native")
-    if (dir.exists()) dir.deleteDir()
+    if (dir.exists()) {
+        dir.deleteDir()
+    }
     dir.parentFile.mkdirs()
 
     if (project.tasks.findByName("packageNativeFiles")) {
         dependsOn packageNativeFiles
     }
+
+
+    // if (OperatingSystem.current().isLinux()) {
+    //     run.environment "LD_LIBRARY_PATH", dir.toString()
+    // }
+    // else if (OperatingSystem.current().isMacOsX()) {
+    //     run.environment "LD_LIBRARY_PATH", dir.toString()
+    //     run.environment "DYLD_LIBRARY_PATH", dir.toString()
+    // }
+    // else if (OperatingSystem.current().isWindows()) {
+    //     run.environment "PATH", dir.toString()
+    // }
 
     doLast {
         project.copy { CopySpec s ->

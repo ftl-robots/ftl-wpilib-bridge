@@ -69,4 +69,10 @@ jar {
     baseName = "bridge_main"
 }
 
+
+// Sets the java library path correctly
+tasks.withType(JavaExec) {
+    systemProperty "java.library.path", "${project.buildDir}/extracted_native"
+}
+
 mainClassName = "com.ftlrobots.bridge.Main"

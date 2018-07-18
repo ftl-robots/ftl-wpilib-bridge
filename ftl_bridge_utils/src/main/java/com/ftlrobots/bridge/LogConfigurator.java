@@ -10,17 +10,16 @@ public final class LogConfigurator {
     private LogConfigurator() {}
 
     public static void loadLog4jConfig() {
-        File logFile = new File("log4j2.xml");
-        URI fileUri = null;
-        if (logFile.exists()) {
-            fileUri = logFile.toURI();
-        }
-
-        if (fileUri != null) {
+        URI configurationUri;
+        try {
+            configurationUri = LogConfigurator.class.getResource("/log4j2.xml").toURI();
             LoggerContext context = (LoggerContext) LogManager.getContext(false);
             if (context != null) {
-                context.setConfigLocation(fileUri);
+                context.setConfigLocation(configurationUri);
             }
+        }
+        catch (Exception ex) {
+            System.out.println("Error loading config: " + ex.getMessage());
         }
     }
 }
