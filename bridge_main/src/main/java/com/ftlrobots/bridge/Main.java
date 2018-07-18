@@ -9,5 +9,15 @@ public class Main {
 
     public static void main(String[] args) {
         DefaultDataAccessorFactory.initialize();
+
+        try {
+            sLogger.log(Level.INFO, "Starting Simulator");
+            Simulator simulator = new Simulator();
+            simulator.startSimulation();
+        }
+        catch (Exception e) {
+            sLogger.log(Level.FATAL, e);
+            System.exit(-1);
+        }
     }
 }
