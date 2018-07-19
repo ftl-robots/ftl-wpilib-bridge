@@ -1,7 +1,9 @@
 package com.ftlrobots.bridge.jni;
 
 import com.ftlrobots.bridge.jni.components.AnalogInCallbackJni;
+import com.ftlrobots.bridge.jni.components.AnalogOutCallbackJni;
 import com.ftlrobots.bridge.jni.components.DigitalCallbackJni;
+import com.ftlrobots.bridge.jni.components.PWMCallbackJni;
 
 import edu.wpi.first.hal.sim.mockdata.SimulatorJNI;
 
@@ -13,6 +15,8 @@ public final class RegisterCallbacksJni extends BaseBridgeJni {
 
         // TODO Everything else
         AnalogInCallbackJni.reset();
+        AnalogOutCallbackJni.reset();
         DigitalCallbackJni.reset();
+        PWMCallbackJni.reset();
     }
 }

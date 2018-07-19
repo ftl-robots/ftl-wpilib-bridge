@@ -1,6 +1,8 @@
 package com.ftlrobots.bridge;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 import com.ftlrobots.bridge.containers.IRobotClassContainer;
 import com.ftlrobots.bridge.containers.JavaRobotContainer;
 import com.ftlrobots.bridge.wrapperaccessors.DataAccessorFactory;
@@ -54,6 +56,19 @@ public class Simulator {
     // Experimental
     private boolean inputVal = false;
 
+    private static String generatePortList(List<Integer> ports) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < ports.size(); i++) {
+            sb.append(ports.get(i));
+            if (i < ports.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
     private Runnable createSimulatorThread() {
         return new Runnable() {
             @Override
@@ -61,8 +76,15 @@ public class Simulator {
                 try {
                     DataAccessorFactory.getInstance().getDriverStationAccessor().waitForProgramToStart();
 
-                    DataAccessorFactory.getInstance().getDriverStationAccessor().setDisabled(false);
-                    DataAccessorFactory.getInstance().getDriverStationAccessor().setAutonomous(false);
+                    // Get the list of ports
+                    sLogger.log(Level.INFO, "Speed Controllers: " + generatePortList(DataAccessorFactory.getInstance().getSpeedControllerAccessor().getPortList()));
+                    sLogger.log(Level.INFO, "Digital IO: " + generatePortList(DataAccessorFactory.getInstance().getDigitalAccessor().getPortList()));
+                    sLogger.log(Level.INFO, "Analog In: " + generatePortList(DataAccessorFactory.getInstance().getAnalogInAccessor().getPortList()));
+                    sLogger.log(Level.INFO, "Analog Out: " + generatePortList(DataAccessorFactory.getInstance().getAnalogOutAccessor().getPortList()));
+
+
+                    // DataAccessorFactory.getInstance().getDriverStationAccessor().setDisabled(false);
+                    // DataAccessorFactory.getInstance().getDriverStationAccessor().setAutonomous(false);
 
                     while (mRunningSimulator) {
                         DataAccessorFactory.getInstance().getDriverStationAccessor().waitForNextUpdateLoop();
