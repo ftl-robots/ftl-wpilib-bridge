@@ -7,9 +7,19 @@ package com.ftlrobots.bridge.wrapperaccessors;
 public interface IDataAccessor {
     String getAccessorType();
 
+    AccelerometerWrapperAccessor getAccelerometerAccessor();
+
+    GyroWrapperAccessor getGyroAccessor();
+
     AnalogSourceWrapperAccessor getAnalogInAccessor();
 
+    AnalogSourceWrapperAccessor getAnalogOutAccessor();
+
     DigitalSourceWrapperAccessor getDigitalAccessor();
+
+    EncoderWrapperAccessor getEncoderAccessor();
+
+    SpeedControllerWrapperAccessor getSpeedControllerAccessor();
 
     DriverStationDataAccessor getDriverStationAccessor();
 
