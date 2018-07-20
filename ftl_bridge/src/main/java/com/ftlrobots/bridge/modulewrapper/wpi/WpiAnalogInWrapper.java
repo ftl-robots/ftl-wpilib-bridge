@@ -3,6 +3,9 @@ package com.ftlrobots.bridge.modulewrapper.wpi;
 import com.ftlrobots.bridge.modulewrapper.SensorWrapper;
 import com.ftlrobots.bridge.modulewrapper.interfaces.IAnalogInWrapper;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
 import edu.wpi.first.wpilibj.sim.AnalogInSim;
 import edu.wpi.first.wpilibj.sim.NotifyCallback;
 import edu.wpi.first.wpilibj.sim.SimValue;
@@ -17,7 +20,7 @@ public class WpiAnalogInWrapper extends SensorWrapper implements IAnalogInWrappe
 
     @Override
     public void callback(String callbackType, SimValue halValue) {
-        System.out.println("[WpiAnalogInWrapper] Callback " + callbackType + " not supported");
+        LogManager.getLogger().log(Level.ERROR, "Callback " + callbackType + " not supported");
     }
 
     @Override
