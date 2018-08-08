@@ -7,6 +7,7 @@ import com.ftlrobots.bridge.containers.JavaRobotContainer;
 import com.ftlrobots.bridge.wrapperaccessors.DataAccessorFactory;
 import com.ftlrobots.link.IHardwareInterface;
 import com.ftlrobots.link.ISystemController;
+import com.ftlrobots.link.data.JoystickData;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -62,6 +63,33 @@ public class BridgeLink {
                     while (mRunningLink) {
                         DataAccessorFactory.getInstance().getDriverStationAccessor().waitForNextUpdateLoop();
 
+                        // Set the robot mode
+                        switch (mSystemController.getRobotMode()) {
+                            case Teleop:
+                                DataAccessorFactory.getInstance().getDriverStationAccessor().setAutonomous(false);
+                                break;
+                            case Autonomous:
+                                DataAccessorFactory.getInstance().getDriverStationAccessor().setAutonomous(true);
+                                break;
+                        }
+
+                        // Set enabled state
+                        DataAccessorFactory.getInstance().getDriverStationAccessor().setDisabled(mSystemController.getRobotDisabled());
+
+                        // Set Match Info
+                        // TODO Implement
+
+                        // Set Joystick info
+                        JoystickData[] joystickInfo = mSystemController.getJoystickData();
+                        if (joystickInfo != null) {
+                            for (int i = 0; i < joystickInfo.length; i++) {
+                                JoystickData stickInfo = joystickInfo[i];
+                                int numButtons = stickInfo.getButtonValues().length;
+                                int buttonMask = 0; // TODO Implement
+
+                                DataAccessorFactory.getInstance().getDriverStationAccessor().setJoystickInformation(i, stickInfo.getAxisValues(), stickInfo.getPovValues(), numButtons, buttonMask);
+                            }
+                        }
                         // TODO Pick up new data from the system controller (current mode, position, etc)
 
                         // TODO Pick up new data from the FTL Hardware (e.g. sensor input, etc)
