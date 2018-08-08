@@ -2,8 +2,8 @@
 include "ftl_bridge"
 include "ftl_bridge_utils"
 include "hal_interface"
-include "bridge_main"
-
 include "link_core"
+
+include "bridge_main"
 
 rootProject.name = 'ftl-wpilib-bridge'
