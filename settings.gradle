@@ -3,6 +3,7 @@ include "ftl_bridge"
 include "ftl_bridge_utils"
 include "hal_interface"
 include "link_core"
+include "link_ros"
 
 include "bridge_main"
 

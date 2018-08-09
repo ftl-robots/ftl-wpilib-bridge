@@ -1,13 +1,16 @@
 package com.ftlrobots.bridge;
 
-import java.util.List;
-import java.util.Map;
+import com.ftlrobots.link.FTLLink;
+import com.ftlrobots.link.debug.DebugLink;
+import com.ftlrobots.link.ros.RosLink;
 
-import com.ftlrobots.link.IHardwareInterface;
-import com.ftlrobots.link.ISystemController;
-import com.ftlrobots.link.debug.DebugLinkHardwareInterface;
-import com.ftlrobots.link.debug.DebugLinkSystemController;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,16 +19,45 @@ public class Main {
     private static final Logger sLogger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
-        DefaultDataAccessorFactory.initialize();
+        Options options = new Options();
+        Option linkType = new Option("l", "linkType", true, "Type of Link");
+        options.addOption(linkType);
 
-        // TODO Initialize the required hardware and system controllers
-        IHardwareInterface hwIface = new DebugLinkHardwareInterface();
-        ISystemController sysController = new DebugLinkSystemController();
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
+        FTLLink ftlLink = null;
 
         try {
+            cmd = parser.parse(options, args);
+        }
+        catch (ParseException e) {
+            sLogger.log(Level.ERROR, e);
+            formatter.printHelp("BridgeMain", options);
+
+        }
+
+        if (cmd != null) {
+            String reqLinkType = cmd.getOptionValue("linkType");
+            if (reqLinkType != null) {
+                switch (reqLinkType.toLowerCase()) {
+                    case "ros": {
+                        ftlLink = new RosLink();
+                    } break;
+                }
+            }
+        }
+
+        DefaultDataAccessorFactory.initialize();
+
+        if (ftlLink == null) {
+            ftlLink = new DebugLink();
+        }
+        
+        try {
             sLogger.log(Level.INFO, "Starting BridgeLink");
-            BridgeLink bridgeLink = new BridgeLink(hwIface, sysController);
-            bridgeLink.start();
+            LinkRunner linkRunner = new LinkRunner(ftlLink);
+            linkRunner.start();
         }
         catch (Exception e) {
             sLogger.log(Level.FATAL, e);

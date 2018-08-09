@@ -15,6 +15,16 @@ repositories {
     maven {
         url getJaci3rdPartyMirror()
     }
+
+    maven {
+        url "https://raw.githubusercontent.com/rosjava/rosjava_mvn_repo/master/"
+    }
+
+    maven {
+        url "https://raw.githubusercontent.com/ftl-robots/maven_repo/master/"
+    }
+
+    jcenter()
 }
 
 apply from: "${rootDir}/common/base_java_publish.gradle"
