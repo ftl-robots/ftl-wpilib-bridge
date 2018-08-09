@@ -37,6 +37,7 @@ dependencies {
     def os_name = org.gradle.internal.os.OperatingSystem.current().getFamilyName()
     compile project(":ftl_bridge")
     compile project(":link_core")
+    compile project(":link_ros")
 
     runtime jar.outputs.files
 

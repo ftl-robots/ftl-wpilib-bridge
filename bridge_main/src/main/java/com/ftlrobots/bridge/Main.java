@@ -7,6 +7,7 @@ import com.ftlrobots.link.IHardwareInterface;
 import com.ftlrobots.link.ISystemController;
 import com.ftlrobots.link.debug.DebugLinkHardwareInterface;
 import com.ftlrobots.link.debug.DebugLinkSystemController;
+import com.ftlrobots.link.ros.RosLink;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +27,10 @@ public class Main {
             sLogger.log(Level.INFO, "Starting BridgeLink");
             BridgeLink bridgeLink = new BridgeLink(hwIface, sysController);
             bridgeLink.start();
+
+            // TEST
+            RosLink rosLink = new RosLink();
+            rosLink.start();
         }
         catch (Exception e) {
             sLogger.log(Level.FATAL, e);
