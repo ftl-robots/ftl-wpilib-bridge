@@ -65,6 +65,6 @@ public class RosLinkNode implements NodeMain {
 
     @Override
     public GraphName getDefaultNodeName() {
-        return GraphName.of("FTLBridge/RosLink");
+        return GraphName.of("ftl_ros_link");
     }
 }
