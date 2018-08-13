@@ -1,7 +1,9 @@
 package com.ftlrobots.link.ros;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.ftlrobots.link.FTLLink;
 import com.ftlrobots.link.LinkCoreConstants.RobotMode;
@@ -88,6 +90,80 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
     @Override
     public JoystickData[] getJoystickData() {
         return this.mJoystickData;
+    }
+
+    @Override
+    public synchronized void setDigitalOutput(int port, boolean value) {
+        mDigitalOutputValues.put(port, value);
+    }
+
+    @Override
+    public synchronized void setDigitalOutput(Map<Integer, Boolean> digitalValueMap) {
+        for (Entry<Integer, Boolean> valEntry : digitalValueMap.entrySet()) {
+            mDigitalOutputValues.put(valEntry.getKey(), valEntry.getValue());
+        }
+    }
+
+    @Override
+    public synchronized void setPWMOutput(int port, double value) {
+        mPWMOutputValues.put(port, value);
+    }
+
+    @Override
+    public synchronized void setPWMOutput(Map<Integer, Double> pwmValueMap) {
+        for (Entry<Integer, Double> valEntry : pwmValueMap.entrySet()) {
+            mPWMOutputValues.put(valEntry.getKey(), valEntry.getValue());
+        }
+    }
+
+    @Override
+    public synchronized boolean getDigitalInput(int port) {
+        if (!mDigitalInputValues.containsKey(port)) {
+            return false;
+        }
+        return mDigitalInputValues.get(port);
+    }
+
+    @Override
+    public synchronized Map<Integer, Boolean> getDigitalInputMulti(List<Integer> portList) {
+        Map<Integer, Boolean> result = new HashMap<>();
+
+        if (portList == null) {
+            result.putAll(mDigitalInputValues);
+        }
+        else {
+            for (Integer wantedPort : portList) {
+                if (mDigitalInputValues.containsKey(wantedPort)) {
+                    result.put(wantedPort, mDigitalInputValues.get(wantedPort));
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public synchronized double getAnalogInput(int port) {
+        if (!mAnalogInputValues.containsKey(port)) {
+            return 0.0;
+        }
+        return mAnalogInputValues.get(port);
+    }
+
+    @Override
+    public synchronized Map<Integer, Double> getAnalogInputMulti(List<Integer> portList) {
+        Map<Integer, Double> result = new HashMap<>();
+
+        if (portList == null) {
+            result.putAll(mAnalogInputValues);
+        }
+        else {
+            for (Integer wantedPort : portList) {
+                if (mAnalogInputValues.containsKey(wantedPort)) {
+                    result.put(wantedPort, mAnalogInputValues.get(wantedPort));
+                }
+            }
+        }
+        return result;
     }
 
     // === ISystemMessageListener Implementation ===

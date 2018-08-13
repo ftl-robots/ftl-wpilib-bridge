@@ -27,5 +27,5 @@ public abstract class FTLLink {
     public abstract boolean getDigitalInput(int port);
     public abstract Map<Integer, Boolean> getDigitalInputMulti(List<Integer> portList);
     public abstract double getAnalogInput(int port);
-    public abstract Map<Integer, Boolean> getAnalogInputMulti(List<Integer> portList);
+    public abstract Map<Integer, Double> getAnalogInputMulti(List<Integer> portList);
 }
