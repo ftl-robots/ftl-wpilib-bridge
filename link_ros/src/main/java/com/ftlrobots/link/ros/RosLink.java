@@ -73,7 +73,8 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
                 sLogger.log(Level.INFO, msg);
                 // TODO Grab the values for "disabled" and "mode"
                 if (msg.getValues().containsKey("disabled")) {
-                    notifyRobotDisabledChanged(msg.getValues().get("disabled"));
+                    boolean isDisabled = (msg.getValues().get("disabled") == "true");
+                    notifyRobotDisabledChanged(isDisabled);
                 }
                 if (msg.getValues().containsKey("mode")) {
                     RobotMode newMode = null;
