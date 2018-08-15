@@ -70,12 +70,11 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
         // Messages with a source of "ftl-robot-mode" deal with disabled state and teleop/auto etc
         switch (msg.getSource()) {
             case "ftl-robot-mode": {
-                sLogger.log(Level.INFO, msg);
-                // TODO Grab the values for "disabled" and "mode"
                 if (msg.getValues().containsKey("disabled")) {
                     boolean isDisabled = (msg.getValues().get("disabled") == "true");
                     notifyRobotDisabledChanged(isDisabled);
                 }
+
                 if (msg.getValues().containsKey("mode")) {
                     RobotMode newMode = null;
                     switch (msg.getValues().get("mode")) {
