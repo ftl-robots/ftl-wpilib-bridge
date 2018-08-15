@@ -1,14 +1,11 @@
 package com.ftlrobots.link.ros;
 
-import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.ftlrobots.link.FTLLink;
 import com.ftlrobots.link.LinkCoreConstants.RobotMode;
 import com.ftlrobots.link.data.JoystickData;
-import com.ftlrobots.link.data.MatchInfo;
 import com.ftlrobots.link.ros.messages.SystemMessage;
 
 import org.apache.logging.log4j.Level;
@@ -18,12 +15,21 @@ import org.ros.node.DefaultNodeMainExecutor;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
 
-public class RosLink extends FTLLink implements ISystemMessageListener {
-    private static final Logger sLogger = LogManager.getLogger(RosLink.class);
+public class RosLink
+    extends FTLLink
+    implements ISystemMessageListener,
+               IMultiJoyListener,
+               IHardwareListener {
+
+        private static final Logger sLogger = LogManager.getLogger(RosLink.class);
 
     private NodeConfiguration mNodeConfig;
     private NodeMainExecutor mNodeExecutor;
+
+    // ROS Nodes
     private RosLinkSystemNode mSysNode;
+    private RosLinkMultiJoyNode mJoyNode;
+    private RosLinkHardwareNode mHardwareNode;
 
     private boolean mLinkActive;
 
@@ -41,12 +47,22 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
         // Set up the node links
         mSysNode = new RosLinkSystemNode();
         mSysNode.registerListener(this);
+
+        mJoyNode = new RosLinkMultiJoyNode();
+        mJoyNode.registerListener(this);
+
+        mHardwareNode = new RosLinkHardwareNode();
+        mHardwareNode.registerListener(this);
     }
 
     // === FTLLink Abstract Methods ===
     @Override
     public void start() {
+        // Start the nodes
         mNodeExecutor.execute(mSysNode, mNodeConfig);
+        mNodeExecutor.execute(mJoyNode, mNodeConfig);
+        mNodeExecutor.execute(mHardwareNode, mNodeConfig);
+
     }
 
     @Override
@@ -56,12 +72,13 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
 
     @Override
     protected void onDigitalOutputValuesChanged() {
-        // TODO Broadcast to ROS
+        // Robot Code -> setDigitalOutput -> HardwareNode -> ROS
+        mHardwareNode.updateDigitalOutput(getDigitalOutputMulti());
     }
 
     @Override
     protected void onPWMOutputValuesChanged() {
-        // TODO Broadcast to ROS
+        mHardwareNode.updatePWMOutput(getPWMOutputMulti());
     }
 
     // === ISystemMessageListener Implementation ===
@@ -72,6 +89,7 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
             case "ftl-robot-mode": {
                 if (msg.getValues().containsKey("disabled")) {
                     boolean isDisabled = (msg.getValues().get("disabled") == "true");
+                    setRobotDisabled(isDisabled);
                     notifyRobotDisabledChanged(isDisabled);
                 }
 
@@ -87,10 +105,34 @@ public class RosLink extends FTLLink implements ISystemMessageListener {
                     }
 
                     if (newMode != null) {
+                        setRobotMode(newMode);
                         notifyRobotModeChanged(newMode);
                     }
                 }
             } break;
         }
+    }
+
+    // === IMultiJoyListener Implementation ===
+    @Override
+    public void onJoystickDataReceived(JoystickData[] data) {
+        // update the joystick data on ourselves
+        setJoystickData(data);
+        notifyJoystickDataChanged(data);
+    }
+
+    // === IHardwareListener Implementation ===
+    // This is where we get inputs from the actual hardware and have to inform our listeners
+    @Override
+    public void onAnalogInputChanged(Map<Integer, Double> values) {
+        // Handle analog input messages from the hardware
+        setAnalogInput(values);
+        notifyAnalogInputsChanged(values);
+    }
+
+    @Override
+    public void onDigitalInputChanged(Map<Integer, Boolean> values) {
+        setDigitalInput(values);
+        notifyDigitalInputsChanged(values);
     }
 }

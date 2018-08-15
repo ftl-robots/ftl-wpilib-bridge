@@ -30,10 +30,18 @@ public abstract class FTLLink {
     // LISTENER REGISTRATION
     // =======================================================
 
+    /**
+     * Register a listener for this FTLLink instance
+     * @param listener Listener object
+     */
     public void registerListener(ILinkListener listener) {
         mListeners.add(listener);
     }
 
+    /**
+     * Un-register a listener for this FTLLink instance
+     * @param listener Listener object
+     */
     public void unregisterListener(ILinkListener listener) {
         mListeners.remove(listener);
     }
@@ -74,6 +82,18 @@ public abstract class FTLLink {
         onDigitalOutputValuesChanged();
     }
 
+    protected synchronized Map<Integer, Boolean> getDigitalOutputMulti() {
+        Map<Integer, Boolean> result = new HashMap<>();
+        result.putAll(mDigitalOutputValues);
+        return result;
+    }
+
+    protected synchronized Map<Integer, Double> getPWMOutputMulti() {
+        Map<Integer, Double> result = new HashMap<>();
+        result.putAll(mPWMOutputValues);
+        return result;
+    }
+
     public synchronized void setPWMOutput(int port, double value) {
         mPWMOutputValues.put(port, value);
         onPWMOutputValuesChanged();
@@ -84,6 +104,10 @@ public abstract class FTLLink {
             mPWMOutputValues.put(valEntry.getKey(), valEntry.getValue());
         }
         onPWMOutputValuesChanged();
+    }
+
+    protected synchronized void setDigitalInput(Map<Integer, Boolean> inputValues) {
+        mDigitalInputValues.putAll(inputValues);
     }
 
     public synchronized boolean getDigitalInput(int port) {
@@ -107,6 +131,10 @@ public abstract class FTLLink {
             }
         }
         return result;
+    }
+
+    protected synchronized void setAnalogInput(Map<Integer, Double> inputValues) {
+        mAnalogInputValues.putAll(inputValues);
     }
 
     public synchronized double getAnalogInput(int port) {
@@ -135,18 +163,38 @@ public abstract class FTLLink {
     // =====================================================
     // SUBCLASS-ACCESSIBLE SETTERS FOR DATA
     // =====================================================
+    /**
+     * Set robot disabled mode on this FTLLink instance. This can be retrieved with
+     * {@link FTLLink#getRobotDisabled()}
+     * @param disabled Whether or not the robot is disabled
+     */
     protected synchronized void setRobotDisabled(boolean disabled) {
         mRobotDisabled = disabled;
     }
 
+    /**
+     * Set robot mode on this FTLLink instance. This can be retrieved with
+     * {@link FTLLink#getRobotMode()}
+     * @param mode Current Robot mode
+     */
     protected synchronized void setRobotMode(RobotMode mode) {
         mRobotMode = mode;
     }
 
+    /**
+     * Set match info on this FTLLink instance. This can be retrieved with
+     * {@link FTLLink#getMatchInfo()}
+     * @param info Current Match info. Null represents no current match
+     */
     protected synchronized void setMatchInfo(MatchInfo info) {
         mMatchInfo = info;
     }
 
+    /**
+     * Set joystick data on this FTLLink instance for retrieval with
+     * {@link FTLLink#getJoystickData()}
+     * @param data Array of joystick information
+     */
     protected synchronized void setJoystickData(JoystickData[] data) {
         mJoystickData = data;
     }
