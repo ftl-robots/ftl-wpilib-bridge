@@ -1,12 +1,7 @@
 package com.ftlrobots.bridge;
 
-import java.util.List;
-import java.util.Map;
-
-import com.ftlrobots.link.IHardwareInterface;
-import com.ftlrobots.link.ISystemController;
-import com.ftlrobots.link.debug.DebugLinkHardwareInterface;
-import com.ftlrobots.link.debug.DebugLinkSystemController;
+import com.ftlrobots.link.FTLLink;
+import com.ftlrobots.link.debug.DebugLink;
 import com.ftlrobots.link.ros.RosLink;
 
 import org.apache.logging.log4j.Level;
@@ -19,13 +14,11 @@ public class Main {
     public static void main(String[] args) {
         DefaultDataAccessorFactory.initialize();
 
-        // TODO Initialize the required hardware and system controllers
-        IHardwareInterface hwIface = new DebugLinkHardwareInterface();
-        ISystemController sysController = new DebugLinkSystemController();
+        FTLLink ftlLink = new DebugLink();
 
         try {
             sLogger.log(Level.INFO, "Starting BridgeLink");
-            BridgeLink bridgeLink = new BridgeLink(hwIface, sysController);
+            BridgeLink bridgeLink = new BridgeLink(ftlLink);
             bridgeLink.start();
 
             // TEST

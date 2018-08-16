@@ -5,8 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.ftlrobots.bridge.containers.IRobotClassContainer;
 import com.ftlrobots.bridge.containers.JavaRobotContainer;
 import com.ftlrobots.bridge.wrapperaccessors.DataAccessorFactory;
-import com.ftlrobots.link.IHardwareInterface;
-import com.ftlrobots.link.ISystemController;
+import com.ftlrobots.link.FTLLink;
 import com.ftlrobots.link.data.JoystickData;
 
 import org.apache.logging.log4j.Level;
@@ -19,8 +18,7 @@ public class BridgeLink {
     private static final Logger sLogger = LogManager.getLogger(BridgeLink.class);
 
     private String mRobotClassName;
-    private IHardwareInterface mHardwareInterface;
-    private ISystemController mSystemController;
+    private FTLLink mLink;
 
     private IRobotClassContainer mRobot;
 
@@ -29,9 +27,8 @@ public class BridgeLink {
 
     protected boolean mRunningLink;
 
-    public BridgeLink(IHardwareInterface hwIface, ISystemController sysController) {
-        mHardwareInterface = hwIface;
-        mSystemController = sysController;
+    public BridgeLink(FTLLink link) {
+        mLink = link;
 
         sLogger.log(Level.TRACE, "Initializing BridgeLink");
 
@@ -64,7 +61,7 @@ public class BridgeLink {
                         DataAccessorFactory.getInstance().getDriverStationAccessor().waitForNextUpdateLoop();
 
                         // Set the robot mode
-                        switch (mSystemController.getRobotMode()) {
+                        switch (mLink.getRobotMode()) {
                             case Teleop:
                                 DataAccessorFactory.getInstance().getDriverStationAccessor().setAutonomous(false);
                                 break;
@@ -74,13 +71,13 @@ public class BridgeLink {
                         }
 
                         // Set enabled state
-                        DataAccessorFactory.getInstance().getDriverStationAccessor().setDisabled(mSystemController.getRobotDisabled());
+                        DataAccessorFactory.getInstance().getDriverStationAccessor().setDisabled(mLink.getRobotDisabled());
 
                         // Set Match Info
                         // TODO Implement
 
                         // Set Joystick info
-                        JoystickData[] joystickInfo = mSystemController.getJoystickData();
+                        JoystickData[] joystickInfo = mLink.getJoystickData();
                         if (joystickInfo != null) {
                             for (int i = 0; i < joystickInfo.length; i++) {
                                 JoystickData stickInfo = joystickInfo[i];
@@ -157,6 +154,8 @@ public class BridgeLink {
             mBridgeLinkThread = new Thread(createLinkThread(), "LinkThread");
 
             mRunningLink = true;
+
+            mLink.start();
 
             mRobotThread.start();
             mBridgeLinkThread.start();
