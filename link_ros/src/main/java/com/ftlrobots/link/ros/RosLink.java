@@ -21,7 +21,7 @@ public class RosLink
                IMultiJoyListener,
                IHardwareListener {
 
-        private static final Logger sLogger = LogManager.getLogger(RosLink.class);
+    private static final Logger sLogger = LogManager.getLogger(RosLink.class);
 
     private NodeConfiguration mNodeConfig;
     private NodeMainExecutor mNodeExecutor;
