@@ -73,6 +73,10 @@ jar {
 // Sets the java library path correctly
 tasks.withType(JavaExec) {
     systemProperty "java.library.path", "${project.buildDir}/extracted_native"
+
+    if (System.getProperty("DEBUG", "false") == "true") {
+        jvmArgs "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9099"
+    }
 }
 
 mainClassName = "com.ftlrobots.bridge.Main"
