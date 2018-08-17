@@ -18,8 +18,8 @@ public class Main {
 
         try {
             sLogger.log(Level.INFO, "Starting BridgeLink");
-            BridgeLink bridgeLink = new BridgeLink(ftlLink);
-            bridgeLink.start();
+            LinkRunner linkRunner = new LinkRunner(ftlLink);
+            linkRunner.start();
 
             // TEST
             RosLink rosLink = new RosLink();

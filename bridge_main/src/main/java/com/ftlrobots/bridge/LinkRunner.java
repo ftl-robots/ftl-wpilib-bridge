@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class BridgeLink {
-    private static final Logger sLogger = LogManager.getLogger(BridgeLink.class);
+public class LinkRunner {
+    private static final Logger sLogger = LogManager.getLogger(LinkRunner.class);
 
     private String mRobotClassName;
     private FTLLink mLink;
@@ -27,7 +27,7 @@ public class BridgeLink {
 
     protected boolean mRunningLink;
 
-    public BridgeLink(FTLLink link) {
+    public LinkRunner(FTLLink link) {
         mLink = link;
 
         sLogger.log(Level.TRACE, "Initializing BridgeLink");
