@@ -17,6 +17,8 @@ configurations {
 
 configurations.maybeCreate("wpilibNativeDeps")
 dependencies {
+    // CLI Processing
+    compile "commons-cli:commons-cli:1.4"
     // WPILib
     compile "edu.wpi.first.wpilibj:wpilibj-java:" + allwpilibVersion()
     compile "edu.wpi.first.wpiutil:wpiutil-java:" + getWpiUtilVersion()
