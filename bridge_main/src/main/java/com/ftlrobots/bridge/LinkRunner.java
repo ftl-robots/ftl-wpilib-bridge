@@ -1,6 +1,9 @@
 package com.ftlrobots.bridge;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.ftlrobots.bridge.containers.IRobotClassContainer;
 import com.ftlrobots.bridge.containers.JavaRobotContainer;
@@ -92,6 +95,15 @@ public class LinkRunner {
                         // TODO Pick up new data from the FTL Hardware (e.g. sensor input, etc)
 
                         // TODO Write the new data to the FTL hardware (e.g. PWM, etc)
+                        // PWM output
+                        List<Integer> pwmPorts = DataAccessorFactory.getInstance().getSpeedControllerAccessor().getPortList();
+                        Map<Integer, Double> pwmOutVals = new HashMap<>();
+                        for (Integer pwmPort : pwmPorts) {
+                            double portVal = DataAccessorFactory.getInstance().getSpeedControllerAccessor().getVoltagePercentage(pwmPort);
+                            pwmOutVals.put(pwmPort, portVal);
+                        }
+
+                        mLink.setPWMOutput(pwmOutVals);
                     }
                 }
                 catch (Throwable e) {
